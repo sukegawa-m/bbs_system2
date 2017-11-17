@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>clicker</title>
+<meta charset="UTF-8">
+<link rel="stylesheet" type="text/css" href="clicker.css">
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<script>
+
+$(function(){
+    $("input").on("keydown", function(e) {
+        if ((e.which && e.which === 13) || (e.keyCode && e.keyCode === 13)) {
+            return false;
+        } else {
+            return true;
+        }
+    });
+});
+
+var cookie;   // 増やすやつ
+//cookie = Number(cookie);
+var property = 0; //自動で増やしてくれるやつ
+var clickPower = 1; //クリックして増える数
+var priceProperty = 10;
+var numProperty = 0;
+var start = true;
+// 繰り返し処理の中身
+function showPassage() {
+	cookie += property;   // カウントアップ
+	var msg = cookie;   // 表示文作成
+	msg = msg.toFixed(2);
+	document.getElementById("PassageArea").innerHTML = msg;   // 表示更
+
+}
+
+// 繰り返し処理の開始
+function startShowing() {
+	cookie = 0;   // カウンタのリセット
+	PassageID = setInterval('showPassage()',1);   // タイマーをセット(1000ms間隔)
+	}
+
+function plusClick() {
+	if (start) {
+		startShowing();
+		start = false;
+	}
+	cookie += clickPower;
+}
+
+function plusCookiePower() {
+	clickPower += (numProperty*0.1);
+
+	var msg4 = clickPower;
+	msg4 = msg4.toFixed(2);
+	document.getElementById("cookiePower").innerHTML = msg4+"個/click";
+}
+
+function plusProperty() {
+if (priceProperty <= cookie) {
+	cookie -= priceProperty;
+	numProperty++;
+	property += numProperty*0.1/1000;
+	priceProperty *= 1.05;
+
+	var msg2 = property;
+	var msg3 = priceProperty;
+	msg2 = msg2.toFixed(4);
+	msg3 = msg3.toFixed(2);
+
+	plusCookiePower();
+	document.getElementById("costProperty").innerHTML = "Cost: "+msg3+"個";
+	document.getElementById("numProperty").innerHTML = "数: "+numProperty+"個";
+	document.getElementById("powerProperty").innerHTML = msg2+"個/s";
+
+
+	}
+}
+
+
+</script>
+</head>
+
+<body>
+	<div class="wrapper">
+
+		<div id="status">
+			<p id="costProperty">Cost 10個</p>
+
+			<p id="numProperty">数: 0個</p>
+			<p id="powerProperty">0.0000/s</p>
+			<p id="cookiePower">1個/click</p>
+		</div>
+
+		<div class="button" id="buy">
+			<input type="button" value="購入!" id="property" onclick="plusProperty();">
+		</div>
+
+		<div id="cookie">
+			<p id="PassageArea">0.00</p>
+		</div>
+
+
+			<input type="button" value="Click me!" id="click" class="clickme" onclick="plusClick();">
+
+	</div>
+</body>
+</html>
